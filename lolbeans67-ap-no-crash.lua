@@ -2055,6 +2055,29 @@ function NoCrashState:SetVisible(drawing, visible)
     end
 end
 
+-- Matcha's existing ESP uses WorldToScreen. Keep the camera call only as a
+-- fallback so the overlay works with either projection implementation.
+function NoCrashState:Project(worldPosition)
+    local ok, point, visible = pcall(function()
+        if type(WorldToScreen) == "function" then
+            return WorldToScreen(worldPosition)
+        end
+
+        local camera = workspace.CurrentCamera
+        if camera then
+            return camera:WorldToViewportPoint(worldPosition)
+        end
+    end)
+
+    if not ok or not point or visible ~= true then
+        return nil, false
+    end
+    if point.Z and point.Z <= 0 then
+        return nil, false
+    end
+    return point, true
+end
+
 function NoCrashState:EnsureTargetMarker()
     if self.TargetMarker then return self.TargetMarker end
 
@@ -2097,16 +2120,15 @@ function NoCrashState:UpdateTargetMarker()
     end
 
     local character = TargetCharacters[1]
-    local camera = workspace.CurrentCamera
     local root = character and character:FindFirstChild("HumanoidRootPart")
     local humanoid = character and character:FindFirstChildWhichIsA("Humanoid")
-    if not camera or not root or not humanoid or humanoid.Health <= 0 then
+    if not root or not humanoid or humanoid.Health <= 0 then
         self:HideTargetMarker()
         return
     end
 
-    local point, visible = camera:WorldToViewportPoint(root.Position + Vector3.new(0, 3.2, 0))
-    if not visible or point.Z <= 0 then
+    local point, visible = self:Project(root.Position + Vector3.new(0, 3.2, 0))
+    if not visible then
         self:HideTargetMarker()
         return
     end
@@ -2194,40 +2216,37 @@ function NoCrashState:UpdateOpponentHealth()
     end
 
     table.sort(candidates, function(a, b) return a.Distance < b.Distance end)
-    local camera = workspace.CurrentCamera
     local displayed = 0
 
-    if camera then
-        for _, candidate in ipairs(candidates) do
-            if displayed >= 12 then break end
-            local head = candidate.Character:FindFirstChild("Head") or candidate.Root
-            local point, visible = camera:WorldToViewportPoint(head.Position + Vector3.new(0, 1.15, 0))
-            if visible and point.Z > 0 then
-                displayed += 1
-                local entry = self:EnsureHealthEntry(displayed)
-                local width, height = 52, 4
-                local health = math.max(0, candidate.Humanoid.Health)
-                local maximum = math.max(1, candidate.Humanoid.MaxHealth)
-                local ratio = math.clamp(health / maximum, 0, 1)
-                local left = point.X - width / 2
-                local top = point.Y
+    for _, candidate in ipairs(candidates) do
+        if displayed >= 12 then break end
+        local head = candidate.Character:FindFirstChild("Head") or candidate.Root
+        local point, visible = self:Project(head.Position + Vector3.new(0, 1.15, 0))
+        if visible then
+            displayed += 1
+            local entry = self:EnsureHealthEntry(displayed)
+            local width, height = 52, 4
+            local health = math.max(0, candidate.Humanoid.Health)
+            local maximum = math.max(1, candidate.Humanoid.MaxHealth)
+            local ratio = math.clamp(health / maximum, 0, 1)
+            local left = point.X - width / 2
+            local top = point.Y
 
-                pcall(function()
-                    entry.Name.Text = tostring(candidate.Character.Name)
-                    entry.Name.Position = Vector2.new(point.X, top - 13)
-                    entry.Background.Position = Vector2.new(left, top)
-                    entry.Background.Size = Vector2.new(width, height)
-                    entry.Fill.Position = Vector2.new(left + 1, top + 1)
-                    entry.Fill.Size = Vector2.new(math.max(0, (width - 2) * ratio), height - 2)
-                    entry.Fill.Color = Color3.fromRGB(math.floor(235 * (1 - ratio)), math.floor(70 + 185 * ratio), 65)
-                    entry.Value.Text = string.format("%d / %d", math.floor(health + 0.5), math.floor(maximum + 0.5))
-                    entry.Value.Position = Vector2.new(point.X, top + 5)
-                    entry.Name.Visible = true
-                    entry.Background.Visible = true
-                    entry.Fill.Visible = true
-                    entry.Value.Visible = true
-                end)
-            end
+            pcall(function()
+                entry.Name.Text = tostring(candidate.Character.Name)
+                entry.Name.Position = Vector2.new(point.X, top - 13)
+                entry.Background.Position = Vector2.new(left, top)
+                entry.Background.Size = Vector2.new(width, height)
+                entry.Fill.Position = Vector2.new(left + 1, top + 1)
+                entry.Fill.Size = Vector2.new(math.max(0, (width - 2) * ratio), height - 2)
+                entry.Fill.Color = Color3.fromRGB(math.floor(235 * (1 - ratio)), math.floor(70 + 185 * ratio), 65)
+                entry.Value.Text = string.format("%d / %d", math.floor(health + 0.5), math.floor(maximum + 0.5))
+                entry.Value.Position = Vector2.new(point.X, top + 5)
+                entry.Name.Visible = true
+                entry.Background.Visible = true
+                entry.Fill.Visible = true
+                entry.Value.Visible = true
+            end)
         end
     end
 
