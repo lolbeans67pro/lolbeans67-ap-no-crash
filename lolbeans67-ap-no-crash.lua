@@ -2163,14 +2163,19 @@ function NoCrashState:EnsureHealthEntry(index)
 
     pcall(function()
         entry.Name.Color = Color3.fromRGB(240, 240, 240)
+        entry.Name.Transparency = 1
         entry.Name.Size = 11
         entry.Name.Center = true
         entry.Name.Outline = true
-        entry.Background.Color = Color3.fromRGB(12, 12, 12)
+        entry.Background.Color = Color3.fromRGB(42, 42, 42)
+        entry.Background.Transparency = 1
         entry.Background.Filled = true
         entry.Background.Thickness = 1
+        entry.Fill.Color = Color3.fromRGB(55, 230, 85)
+        entry.Fill.Transparency = 1
         entry.Fill.Filled = true
         entry.Value.Color = Color3.fromRGB(240, 240, 240)
+        entry.Value.Transparency = 1
         entry.Value.Size = 10
         entry.Value.Center = true
         entry.Value.Outline = true
@@ -2226,8 +2231,8 @@ function NoCrashState:UpdateOpponentHealth()
             displayed += 1
             local entry = self:EnsureHealthEntry(displayed)
             local width, height = 52, 4
-            local health = math.max(0, candidate.Humanoid.Health)
-            local maximum = math.max(1, candidate.Humanoid.MaxHealth)
+            local health = math.max(0, tonumber(candidate.Humanoid.Health) or 0)
+            local maximum = math.max(1, tonumber(candidate.Humanoid.MaxHealth) or 1)
             local ratio = math.clamp(health / maximum, 0, 1)
             local left = point.X - width / 2
             local top = point.Y
@@ -2238,8 +2243,8 @@ function NoCrashState:UpdateOpponentHealth()
                 entry.Background.Position = Vector2.new(left, top)
                 entry.Background.Size = Vector2.new(width, height)
                 entry.Fill.Position = Vector2.new(left + 1, top + 1)
-                entry.Fill.Size = Vector2.new(math.max(0, (width - 2) * ratio), height - 2)
-                entry.Fill.Color = Color3.fromRGB(math.floor(235 * (1 - ratio)), math.floor(70 + 185 * ratio), 65)
+                entry.Fill.Size = Vector2.new(ratio > 0 and math.max(1, (width - 2) * ratio) or 0, height - 2)
+                entry.Fill.Color = ratio >= 0.995 and Color3.fromRGB(55, 230, 85) or Color3.fromRGB(math.floor(235 * (1 - ratio)), math.floor(70 + 185 * ratio), 65)
                 entry.Value.Text = string.format("%d / %d", math.floor(health + 0.5), math.floor(maximum + 0.5))
                 entry.Value.Position = Vector2.new(point.X, top + 5)
                 entry.Name.Visible = true
@@ -2266,9 +2271,13 @@ function NoCrashState:EnsurePersonalHealth()
 
     pcall(function()
         self.PersonalHealth.Background.Filled = true
-        self.PersonalHealth.Background.Color = Color3.fromRGB(12, 12, 12)
+        self.PersonalHealth.Background.Color = Color3.fromRGB(42, 42, 42)
+        self.PersonalHealth.Background.Transparency = 1
         self.PersonalHealth.Fill.Filled = true
+        self.PersonalHealth.Fill.Color = Color3.fromRGB(55, 230, 85)
+        self.PersonalHealth.Fill.Transparency = 1
         self.PersonalHealth.Value.Color = Color3.fromRGB(245, 245, 245)
+        self.PersonalHealth.Value.Transparency = 1
         self.PersonalHealth.Value.Size = 13
         self.PersonalHealth.Value.Center = true
         self.PersonalHealth.Value.Outline = true
@@ -2294,19 +2303,24 @@ function NoCrashState:UpdatePersonalHealth()
 
     local entry = self:EnsurePersonalHealth()
     local width, height = 180, 6
-    local health = math.max(0, humanoid.Health)
-    local maximum = math.max(1, humanoid.MaxHealth)
+    local health = math.max(0, tonumber(humanoid.Health) or 0)
+    local maximum = math.max(1, tonumber(humanoid.MaxHealth) or 1)
     local ratio = math.clamp(health / maximum, 0, 1)
-    local position = Vector2.new((camera.ViewportSize.X - width) / 2, camera.ViewportSize.Y - 64)
+    local viewport = camera.ViewportSize
+    if not self.PersonalViewport or self.PersonalViewport.X ~= viewport.X or self.PersonalViewport.Y ~= viewport.Y then
+        self.PersonalViewport = viewport
+        self.PersonalPosition = Vector2.new((viewport.X - width) / 2, viewport.Y - 64)
+    end
+    local position = self.PersonalPosition
 
     pcall(function()
         entry.Background.Position = position
         entry.Background.Size = Vector2.new(width, height)
         entry.Fill.Position = position + Vector2.new(1, 1)
-        entry.Fill.Size = Vector2.new(math.max(0, (width - 2) * ratio), height - 2)
-        entry.Fill.Color = Color3.fromRGB(math.floor(235 * (1 - ratio)), math.floor(70 + 185 * ratio), 65)
+        entry.Fill.Size = Vector2.new(ratio > 0 and math.max(1, (width - 2) * ratio) or 0, height - 2)
+        entry.Fill.Color = ratio >= 0.995 and Color3.fromRGB(55, 230, 85) or Color3.fromRGB(math.floor(235 * (1 - ratio)), math.floor(70 + 185 * ratio), 65)
         entry.Value.Text = string.format("HP  %d / %d", math.floor(health + 0.5), math.floor(maximum + 0.5))
-        entry.Value.Position = Vector2.new(camera.ViewportSize.X / 2, position.Y - 15)
+        entry.Value.Position = Vector2.new(viewport.X / 2, position.Y - 15)
         entry.Background.Visible = true
         entry.Fill.Visible = true
         entry.Value.Visible = true
