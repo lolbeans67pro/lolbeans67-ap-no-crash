@@ -1,5 +1,3 @@
--- Lolbeans67 AP - No Crash edition (direct GitHub build; no Cloudflare boot).
--- A re-execution disconnects only this build's previous owned work first.
 pcall(function()
     if _G.__Lolbeans67APNoCrash and _G.__Lolbeans67APNoCrash.Cleanup then
         _G.__Lolbeans67APNoCrash:Cleanup()
@@ -375,7 +373,7 @@ local GameConfig = {
             DisplayName = "4thM1",
             ReactionTime = 0.16
         },
-        ["rbxassetid://102407060635393"] = {
+        ["rbxassetid://88619229552579"] = {
             DisplayName = "Ook",
             ["ReactionTime"] = 0.1,
         },
