@@ -425,23 +425,23 @@ local GameConfig = {
         },
     },
     ["WingChun"] = {
-        ["rbxassetid://81810173569294"] = {
+        ["rbxassetid://135699957281468"] = {
             DisplayName = "4thM1",
             ReactionTime = 0.52
         },
-        ["rbxassetid://82196924299426"] = {
+        ["rbxassetid://125237241325107"] = {
             DisplayName = "M2",
             ["ReactionTime"] = 0.06,
         },
-        ["rbxassetid://71178147313608"] = {
+        ["rbxassetid://94976161225956"] = {
             DisplayName = "1stM1",
             ReactionTime = 0.16
         },
-        ["rbxassetid://117898175201201"] = {
+        ["rbxassetid://130903067566077"] = {
             DisplayName = "2ndM1",
             ReactionTime = 0.16
         },
-        ["rbxassetid://121315597867666"] = {
+        ["rbxassetid://139503477666199"] = {
             DisplayName = "3rdM1",
             ReactionTime = 0.16
         },
