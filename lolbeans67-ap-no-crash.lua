@@ -94,6 +94,7 @@ local GameConfig = {
             DisplayName = "4thM1",
             ReactionTime = 0.15,
         },
+        ["rbxassetid://116278224437295"] = { DisplayName = "M2", ReactionTime = 0.3 },
         ["rbxassetid://96466099895892"] = {
             DisplayName = "M2",
             ReactionTime = 0.3,
@@ -165,6 +166,7 @@ local GameConfig = {
 
     },
     ["MuayThaiAnims"] = {
+        ["rbxassetid://137299369381761"] = { DisplayName = "M2", ReactionTime = 0.3 },
         ["rbxassetid://74462376752922"] = {
             DisplayName = "M2",
             ReactionTime = 0.3,
@@ -423,6 +425,22 @@ local GameConfig = {
         ["rbxassetid://113531813891302"] = {
             DisplayName = "M2",
         },
+    },
+    ["JinAnims"] = {
+        ["rbxassetid://89404705737555"] = { DisplayName = "1stM1" },
+        ["rbxassetid://126407816250012"] = { DisplayName = "2ndM1" },
+        ["rbxassetid://111599179234006"] = { DisplayName = "3rdM1" },
+        ["rbxassetid://115508221180588"] = { DisplayName = "4thM1" },
+        ["rbxassetid://90986005545750"] = { DisplayName = "M2" },
+    },
+    ["DragonAnims"] = {
+        ["rbxassetid://90632031214738"] = { DisplayName = "1stM1" },
+        ["rbxassetid://129870265426519"] = { DisplayName = "2ndM1" },
+        ["rbxassetid://103119271372106"] = { DisplayName = "3rdM1" },
+        ["rbxassetid://81350056849630"] = { DisplayName = "4thM1" },
+        -- Both M2 IDs are registered; their flip kick/dropkick labels are unconfirmed.
+        ["rbxassetid://101059515516534"] = { DisplayName = "M2" },
+        ["rbxassetid://101850612921423"] = { DisplayName = "M2" },
     },
     ["WingChun"] = {
         ["rbxassetid://135699957281468"] = {
