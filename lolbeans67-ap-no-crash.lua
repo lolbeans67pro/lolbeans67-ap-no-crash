@@ -442,6 +442,42 @@ local GameConfig = {
         ["rbxassetid://101059515516534"] = { DisplayName = "M2" },
         ["rbxassetid://101850612921423"] = { DisplayName = "M2" },
     },
+    ["PerfectcopyAnims"] = {
+        ["rbxassetid://89266206062347"] = { DisplayName = "1stM1" },
+        ["rbxassetid://118618177788645"] = { DisplayName = "2ndM1" },
+        ["rbxassetid://92563642848078"] = { DisplayName = "3rdM1" },
+        ["rbxassetid://129685126037621"] = { DisplayName = "4thM1" },
+        ["rbxassetid://84779382426562"] = { DisplayName = "M2" },
+        ["rbxassetid://123851034848865"] = { DisplayName = "M2" },
+    },
+    ["AkidoAnims"] = {
+        ["rbxassetid://101667835774312"] = { DisplayName = "1stM1" },
+        ["rbxassetid://72100016327641"] = { DisplayName = "2ndM1" },
+        ["rbxassetid://86622096544948"] = { DisplayName = "3rdM1" },
+        ["rbxassetid://116579071175823"] = { DisplayName = "4thM1" },
+        ["rbxassetid://113723231962801"] = { DisplayName = "M2", Counter = true },
+    },
+    ["TaijustuAnims"] = {
+        ["rbxassetid://112772003891760"] = { DisplayName = "1stM1" },
+        ["rbxassetid://120968355159054"] = { DisplayName = "2ndM1" },
+        ["rbxassetid://134363734889174"] = { DisplayName = "3rdM1" },
+        ["rbxassetid://140439623648569"] = { DisplayName = "4thM1" },
+        ["rbxassetid://70666956463595"] = { DisplayName = "M2" },
+    },
+    ["GiovannaAnims"] = {
+        ["rbxassetid://135716459366783"] = { DisplayName = "1stM1" },
+        ["rbxassetid://128178940723536"] = { DisplayName = "2ndM1" },
+        ["rbxassetid://133339208745195"] = { DisplayName = "3rdM1" },
+        ["rbxassetid://129619149164145"] = { DisplayName = "4thM1" },
+        ["rbxassetid://84500842912133"] = { DisplayName = "M2" },
+    },
+    ["HikakenAnims"] = {
+        ["rbxassetid://109471728828625"] = { DisplayName = "1stM1" },
+        ["rbxassetid://92152402802393"] = { DisplayName = "2ndM1" },
+        ["rbxassetid://139736320509560"] = { DisplayName = "3rdM1" },
+        ["rbxassetid://80033824766939"] = { DisplayName = "4thM1" },
+        ["rbxassetid://94916233438251"] = { DisplayName = "M2" },
+    },
     ["WingChun"] = {
         ["rbxassetid://135699957281468"] = {
             DisplayName = "4thM1",
@@ -541,6 +577,15 @@ for styleName, assets in pairs(GameConfig) do
 end
 
 GameConfig = FlattenedConfig
+
+-- New M2 animation IDs retain the existing normal M2 settings as a baseline.
+GameConfig["rbxassetid://80822959210741"] = table.clone(GameConfig["rbxassetid://128363063231486"])
+GameConfig["rbxassetid://132891856788045"] = table.clone(GameConfig["rbxassetid://128921678079615"])
+GameConfig["rbxassetid://132891856788045"].Awakened = true
+GameConfig["rbxassetid://83352556099235"] = table.clone(GameConfig["rbxassetid://91419261625463"])
+GameConfig["rbxassetid://83352556099235"].Awakened = true
+GameConfig["rbxassetid://85984892267786"] = table.clone(GameConfig["rbxassetid://90986005545750"])
+GameConfig["rbxassetid://85984892267786"].Awakened = true
 
 local AnimationIdSliders = {}
 
@@ -1122,7 +1167,7 @@ local function CreateGroupSliders()
         local StyleSection = Config_Tab:Section(StyleName, Side)
         
         for animationId, Info in pairs(Animations) do
-            local nameLabel = Info.DisplayName or tostring(animationId)
+            local nameLabel = (Info.Awakened and "Awakened " or "") .. (Info.DisplayName or tostring(animationId))
             
             if Info["ParryFunction"] then  
                 StyleSection:Label("Slider not possible for " .. nameLabel .. " (uses function)")
