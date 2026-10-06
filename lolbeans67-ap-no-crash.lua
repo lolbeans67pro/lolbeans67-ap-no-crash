@@ -586,6 +586,18 @@ GameConfig["rbxassetid://83352556099235"] = table.clone(GameConfig["rbxassetid:/
 GameConfig["rbxassetid://83352556099235"].Awakened = true
 GameConfig["rbxassetid://85984892267786"] = table.clone(GameConfig["rbxassetid://90986005545750"])
 GameConfig["rbxassetid://85984892267786"].Awakened = true
+GameConfig["rbxassetid://82076026376495"] = table.clone(GameConfig["rbxassetid://78127273702521"])
+GameConfig["rbxassetid://82076026376495"].Awakened = true
+-- Blackflash uses this same animation ID in both normal and awakened forms.
+GameConfig["rbxassetid://137954350192006"] = table.clone(GameConfig["rbxassetid://78127273702521"])
+GameConfig["rbxassetid://137954350192006"].Blackflash = true
+GameConfig["rbxassetid://124394929276448"] = table.clone(GameConfig["rbxassetid://137299369381761"])
+GameConfig["rbxassetid://124394929276448"].Awakened = true
+GameConfig["rbxassetid://120251079111989"] = table.clone(GameConfig["rbxassetid://98256190530845"])
+GameConfig["rbxassetid://100495393065612"] = table.clone(GameConfig["rbxassetid://120251079111989"])
+GameConfig["rbxassetid://100495393065612"].Awakened = true
+GameConfig["rbxassetid://139458993289546"] = table.clone(GameConfig["rbxassetid://70666956463595"])
+GameConfig["rbxassetid://139458993289546"].Awakened = true
 
 local AnimationIdSliders = {}
 
@@ -1167,7 +1179,7 @@ local function CreateGroupSliders()
         local StyleSection = Config_Tab:Section(StyleName, Side)
         
         for animationId, Info in pairs(Animations) do
-            local nameLabel = (Info.Awakened and "Awakened " or "") .. (Info.DisplayName or tostring(animationId))
+            local nameLabel = (Info.Blackflash and "Blackflash " or Info.Awakened and "Awakened " or "") .. (Info.DisplayName or tostring(animationId))
             
             if Info["ParryFunction"] then  
                 StyleSection:Label("Slider not possible for " .. nameLabel .. " (uses function)")
