@@ -580,8 +580,13 @@ GameConfig = FlattenedConfig
 
 -- New M2 animation IDs retain the existing normal M2 settings as a baseline.
 GameConfig["rbxassetid://80822959210741"] = table.clone(GameConfig["rbxassetid://128363063231486"])
-GameConfig["rbxassetid://132891856788045"] = table.clone(GameConfig["rbxassetid://128921678079615"])
-GameConfig["rbxassetid://132891856788045"].Awakened = true
+-- Awakened Boxing M2 uses the adjustable timing path instead of regular Boxing's custom routine.
+GameConfig["rbxassetid://132891856788045"] = {
+    Style = "BoxingAnims",
+    DisplayName = "M2",
+    Awakened = true,
+    ReactionTime = 0,
+}
 GameConfig["rbxassetid://83352556099235"] = table.clone(GameConfig["rbxassetid://91419261625463"])
 GameConfig["rbxassetid://83352556099235"].Awakened = true
 GameConfig["rbxassetid://85984892267786"] = table.clone(GameConfig["rbxassetid://90986005545750"])
@@ -598,6 +603,8 @@ GameConfig["rbxassetid://100495393065612"] = table.clone(GameConfig["rbxassetid:
 GameConfig["rbxassetid://100495393065612"].Awakened = true
 GameConfig["rbxassetid://139458993289546"] = table.clone(GameConfig["rbxassetid://70666956463595"])
 GameConfig["rbxassetid://139458993289546"].Awakened = true
+GameConfig["rbxassetid://84606073717547"] = table.clone(GameConfig["rbxassetid://116278224437295"])
+GameConfig["rbxassetid://84606073717547"].Awakened = true
 
 local AnimationIdSliders = {}
 
@@ -1187,7 +1194,7 @@ local function CreateGroupSliders()
             end
             
             AnimationIdSliders[animationId] = StyleSection:Slider("Reaction Time: " .. nameLabel, 0, 0.01, 0, 1, "", function(v)
-                if v ~= DefaultReactionTime then
+                if v ~= DefaultReactionTime or animationId == "rbxassetid://132891856788045" then
                     Info.ReactionTime = v                    
                 end
             end)
